@@ -99,9 +99,23 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         else{
             return UICollectionViewCell()
         }
+    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    }
+        
+        var selectPokemon: Pokemon!
+        
+        if inSearchMode{
+            selectPokemon = filtredPokemons[indexPath.row]
+        }
+        else{
+            
+            selectPokemon = pokemons[indexPath.row]
+        }
+        
+        performSegue(withIdentifier: "seguePokemonDetailVC", sender: selectPokemon)
+        
+        }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -112,8 +126,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 105, height: 105)
         }
-    }
-    
+
     @IBAction func musicBtnPressed(_ sender: UIButton) {
         if musicPlayer.isPlaying{
             musicPlayer.pause()
@@ -146,5 +159,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "seguePokemonDetailVC"{
+            if let detailsVC = segue.destination as? PokemonDetailVC{
+                if let pokemonOut = sender as? Pokemon{
+                    detailsVC.pokemonIn = pokemonOut
+                }
+            }
+    }
+    }
 }
-
